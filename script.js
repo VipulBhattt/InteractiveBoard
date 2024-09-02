@@ -52,18 +52,14 @@ document.querySelector("#clearBoard").addEventListener('click',()=>{
 let localVideo=document.getElementById('localVideo');
 let remoteVideo=document.getElementById('remoteVideo');
 
+
 //Creating Peer Connections and media streams
 let localStream;
 let remoteStream;
 let peer;
 let call;
+//let peerId = prompt("Enter the peer ID");
 
-//Creating ICE server
-const configuration ={
-    iceServers:[
-        {urls: 'stun:stun.l.google.com:19302'},
-    ]
-}
 
 // Function to start the call
 async function startCall() {
@@ -75,7 +71,7 @@ async function startCall() {
         peer = new Peer(); 
         peer.on('open', (id) => {
             console.log('My peer ID is: ' + id);
-            document.getElementById('peerId').innerText=id;
+            document.getElementById('peerId').innerText="Your peer ID is "+id;
         });
         peer.on('call', (incomingCall) => {
             incomingCall.answer(localStream);
@@ -96,8 +92,5 @@ function callPeer(remotePeerId) {
         remoteVideo.srcObject = remoteStream;
     });
 }
-
-document.querySelector('#startCall').addEventListener('click', startCall);
-
 
 document.querySelector('#startCall').addEventListener('click', startCall);
