@@ -2,18 +2,11 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: #0C2D48;
-    background-image: url("pikaso_texttoimage_Rich-textured-brushstrokes-with-deep-colors-and-a-.jpeg");
+    background-color: #071330;
     background-position:left;
     background-repeat: repeat-x;
     background-size: 150;
-    font-family: 'Patrick Hand', cursive;
-    color: #05445E;
-    text-shadow: 
-        1px 1px 0 #D4F1F4,  
-        -1px -1px 0 #D4F1F4,
-        1px -1px 0 #D4F1F4,
-        -1px 1px 0 #D4F1F4;
+    color: #C3CEDA;
 }
 h1{
     text-align: center;
@@ -85,22 +78,14 @@ video {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-family: 'Patrick Hand', cursive;
     color: #B1D4E0;
     transition: background-color 0.5s;
-    transition: font-size 0.5s;
 }
 
 #toolbar button:hover {
     background-color: #145DA0;
-    font-size: 25px;
 }
 #peerId{
     color: #B1D4E0;
-    text-shadow: 
-    1px 1px 0 #040404,  
-    -1px -1px 0 #161717,
-    1px -1px 0 #0a0a0a,
-    -1px 1px 0 #1a1a1b;
 }
 
