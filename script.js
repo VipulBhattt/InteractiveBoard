@@ -71,7 +71,7 @@ async function startCall() {
         peer = new Peer(); 
         peer.on('open', (id) => {
             console.log('My peer ID is: ' + id);
-            document.getElementById('peerId').innerText="Your peer ID is "+id;
+            document.getElementById('peerId').innerText= "Your peer ID is "+id;
         });
         peer.on('call', (incomingCall) => {
             incomingCall.answer(localStream);
