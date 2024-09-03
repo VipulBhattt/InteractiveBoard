@@ -177,33 +177,73 @@ function joinCall(remotePeerId) {
         console.error('Error accessing media devices.', error);
     });
 }
-function sendDrawingData(x, y) {
-    const drawingData = {
-        x: x,
-        y: y,
-        tool: tool,
-        peerId: peer.id
-    };
-    if (conn) {
-        conn.send(drawingData);
-    }
-}
+let conn;
+
+// Establishing a connection for the host
 peer.on('connection', (dataConnection) => {
     conn = dataConnection;
     conn.on('data', (drawingData) => {
-        if (drawingData.peerId !== peer.id) {
-            const rect = canvas.getBoundingClientRect();
-            const x = drawingData.x - rect.left;
-            const y = drawingData.y - rect.top;
-
-            canvasUse.lineWidth = drawingData.tool === 'pen' ? 2 : 10;
-            canvasUse.lineCap = 'round';
-            canvasUse.strokeStyle = drawingData.tool === 'pen' ? '#000' : '#fff';
-            
-            canvasUse.lineTo(x, y);
-            canvasUse.stroke();
-        }
+        applyDrawingData(drawingData);
     });
 });
 
+// When the peer opens (for host or guest)
+peer.on('open', (id) => {
+    console.log('My peer ID is: ' + id);
+    document.getElementById('peerId').innerText = "Your peer ID is " + id;
+});
 
+function sendDrawingData(x, y) {
+    if (conn && conn.open) {
+        const drawingData = {
+            x: x,
+            y: y,
+            tool: tool
+        };
+        conn.send(drawingData);
+    }
+}
+
+canvas.addEventListener('mousemove', (e) => {
+    if (!draw) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    canvasUse.lineWidth = tool === 'pen' ? 2 : 10;
+    canvasUse.lineCap = 'round';
+    canvasUse.strokeStyle = tool === 'pen' ? '#000' : '#fff';
+
+    canvasUse.lineTo(x, y);
+    canvasUse.stroke();
+    sendDrawingData(x, y);  // Send the drawing data
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    if (!draw) return;
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    canvasUse.lineWidth = tool === 'pen' ? 2 : 10;
+    canvasUse.lineCap = 'round';
+    canvasUse.strokeStyle = tool === 'pen' ? '#000' : '#fff';
+
+    canvasUse.lineTo(x, y);
+    canvasUse.stroke();
+    sendDrawingData(x, y);  // Send the drawing data
+    e.preventDefault();
+});
+function applyDrawingData(drawingData) {
+    const rect = canvas.getBoundingClientRect();
+    const x = drawingData.x - rect.left;
+    const y = drawingData.y - rect.top;
+
+    canvasUse.lineWidth = drawingData.tool === 'pen' ? 2 : 10;
+    canvasUse.lineCap = 'round';
+    canvasUse.strokeStyle = drawingData.tool === 'pen' ? '#000' : '#fff';
+    
+    canvasUse.lineTo(x, y);
+    canvasUse.stroke();
+}
