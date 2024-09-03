@@ -36,6 +36,39 @@ canvas.addEventListener('mousemove', (e) => {
     canvasUse.stroke();
 });
 
+canvas.addEventListener('touchstart', (e) => {
+    draw = true;
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    canvasUse.beginPath();
+    canvasUse.moveTo(x, y);
+    e.preventDefault(); // Prevent scrolling when touching the canvas
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    if (!draw) return;
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    
+    canvasUse.lineWidth = tool === 'pen' ? 2 : 10;
+    canvasUse.lineCap = 'round';
+    canvasUse.strokeStyle = tool === 'pen' ? '#000' : '#fff';
+    
+    canvasUse.lineTo(x, y);
+    canvasUse.stroke();
+    e.preventDefault();
+});
+
+canvas.addEventListener('touchend', () => {
+    draw = false;
+    canvasUse.beginPath();
+});
+
+
 //CreatingTools
 document.querySelector("#penTool").addEventListener('click',()=>{
     tool='pen';
