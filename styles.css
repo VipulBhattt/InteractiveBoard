@@ -13,10 +13,27 @@ h1{
     font-size: 2.2rem;
     margin-top: -5px;
 }
-h6{
-    text-align: center;
-    font-size: 1.2rem;
+#roleSelection{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: -10px;
+    margin-bottom: 10px;
+}
+.MeetJoin{
+    padding: 10px 15px;
+    width: 10%;
+    height: 5%;
+    margin-right: 10px;
+    background-color: #2E8BC0;
+    text-shadow: #000;
+    font-weight: bolder;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #B1D4E0;
+    transition: background-color 0.5s;
 }
 #container {
     margin-top: -10px;
@@ -33,7 +50,7 @@ h6{
     border: 2px solid #B1D4E0;
     margin-bottom: 20px;
     position: relative;
-    height: 70%;
+    height: 60%;
 }
 
 canvas {
@@ -88,4 +105,58 @@ video {
 #peerId{
     color: #B1D4E0;
 }
+@media only screen and (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem; /* Reduce the heading size */
+    }
+    
+    .MeetJoin {
+        width: 50%;
+        font-size: 0.9rem; /* Smaller button font size */
+        padding: 8px 10px; /* Adjust button padding */
+    }
+    
+    #toolbar button {
+        width: 40%;
+        font-size: 0.8rem; /* Reduce font size */
+        padding: 8px 10px; /* Smaller padding */
+    }
+}
 
+@media only screen and (max-width: 768px) {
+    #container {
+        flex-direction: column;
+        align-items: stretch; /* Make container use full width */
+    }
+    
+    #whiteboard-container {
+        height: 50vh; /* Adjust height for smaller screens */
+    }
+
+    #video-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .vid {
+        width: 80%; /* Make video wider on small screens */
+        margin-bottom: 10px;
+    }
+}
+@media only screen and (max-width: 768px) {
+    canvas {
+        height: 40vh; /* Adjust canvas height */
+    }
+}
+@media only screen and (max-width: 768px) {
+    .MeetJoin, #toolbar button {
+        padding: 15px 20px; /* Increase padding */
+        font-size: 1rem; /* Make the text bigger */
+    }
+    
+    input[type="text"] {
+        font-size: 1rem;
+        padding: 10px;
+        width: 80%;
+    }
+}
