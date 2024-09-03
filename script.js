@@ -177,4 +177,33 @@ function joinCall(remotePeerId) {
         console.error('Error accessing media devices.', error);
     });
 }
+function sendDrawingData(x, y) {
+    const drawingData = {
+        x: x,
+        y: y,
+        tool: tool,
+        peerId: peer.id
+    };
+    if (conn) {
+        conn.send(drawingData);
+    }
+}
+peer.on('connection', (dataConnection) => {
+    conn = dataConnection;
+    conn.on('data', (drawingData) => {
+        if (drawingData.peerId !== peer.id) {
+            const rect = canvas.getBoundingClientRect();
+            const x = drawingData.x - rect.left;
+            const y = drawingData.y - rect.top;
+
+            canvasUse.lineWidth = drawingData.tool === 'pen' ? 2 : 10;
+            canvasUse.lineCap = 'round';
+            canvasUse.strokeStyle = drawingData.tool === 'pen' ? '#000' : '#fff';
+            
+            canvasUse.lineTo(x, y);
+            canvasUse.stroke();
+        }
+    });
+});
+
 
