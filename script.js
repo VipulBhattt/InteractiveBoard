@@ -16,6 +16,7 @@ function resizeCanvas(){
 }
 resizeCanvas();
 
+
 canvas.addEventListener('mouseup',()=>{
     draw=false;
     canvasUse.beginPath();
@@ -60,6 +61,29 @@ let peer;
 let call;
 //let peerId = prompt("Enter the peer ID");
 
+const configuration = {
+    iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+    ]
+};
+
+document.getElementById('hostMeeting').addEventListener('click', async () => {
+    document.getElementById('roleSelection').style.display = 'none';
+    document.getElementById('container').style.display = 'block';
+
+    await startCall();  // Start the call as the host
+});
+
+document.getElementById('joinMeeting').addEventListener('click', () => {
+    const remotePeerId = prompt("Enter the Peer ID of the host to join the meeting:");
+    if (remotePeerId) {
+        document.getElementById('roleSelection').style.display = 'none';
+        document.getElementById('container').style.display = 'block';
+
+        joinCall(remotePeerId);  // Join the call using the provided Peer ID
+    }
+});
+
 
 // Function to start the call
 async function startCall() {
@@ -71,7 +95,7 @@ async function startCall() {
         peer = new Peer(); 
         peer.on('open', (id) => {
             console.log('My peer ID is: ' + id);
-            document.getElementById('peerId').innerText= "Your peer ID is "+id;
+            document.getElementById('peerId').innerText="Your peer ID is "+id;
         });
         peer.on('call', (incomingCall) => {
             incomingCall.answer(localStream);
@@ -93,4 +117,31 @@ function callPeer(remotePeerId) {
     });
 }
 
-document.querySelector('#startCall').addEventListener('click', startCall);
+function joinCall(remotePeerId) {
+    peer = new Peer();
+    peer.on('open', (id) => {
+        console.log('My peer ID is: ' + id);
+        document.getElementById('peerId').innerText = id;
+    });
+    peer.on('call', (incomingCall) => {
+        incomingCall.answer(localStream);
+
+        incomingCall.on('stream', (remoteStream) => {
+            remoteVideo.srcObject = remoteStream;
+        });
+    });
+
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+        localStream = stream;
+        localVideo.srcObject = stream;
+
+        call = peer.call(remotePeerId, localStream);
+
+        call.on('stream', (remoteStream) => {
+            remoteVideo.srcObject = remoteStream;
+        });
+    }).catch(error => {
+        console.error('Error accessing media devices.', error);
+    });
+}
+
